@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone - Dynamic Content</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #535353;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #737373;
+        }
+        /* Add a transition for the progress bar */
+        #progress-bar {
+            transition: width 0.1s linear;
+        }
+        /* Make the progress and volume bars clickable */
+        #progress-bar-container, #volume-bar-container {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-300">
+
+    <div class="h-screen flex flex-col">
+        <!-- Main Content Area -->
+        <div class="flex flex-1 overflow-hidden">
+
+            <!-- Sidebar -->
+            <aside class="w-64 bg-black p-2 flex-shrink-0">
+                <!-- ... existing sidebar code ... -->
+                <div class="bg-[#121212] rounded-lg p-4 space-y-4">
+                    <a href="#" class="flex items-center gap-4 text-white font-bold">
+                        <!-- Home Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        Home
+                    </a>
+                    <a href="#" class="flex items-center gap-4 hover:text-white transition-colors">
+                        <!-- Search Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        Search
+                    </a>
+                </div>
+
+                <div class="bg-[#121212] rounded-lg mt-2 flex-1 p-2">
+                    <div class="p-2 flex justify-between items-center">
+                        <a href="#" class="flex items-center gap-4 hover:text-white transition-colors">
+                            <!-- Library Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6.5h4"/><path d="M14 11h6"/><path d="M14 15.5h6"/><path d="M4 20v-8.4a2.4 2.4 0 0 1 1.2-2.1L12 5l6.8 4.5a2.4 2.4 0 0 1 1.2 2.1V20Z"/><path d="M4 11.5V20"/><path d="M20 11.5V20"/><path d="M12 5v15"/></svg>
+                            Your Library
+                        </a>
+                        <button class="hover:bg-gray-800 rounded-full p-1">
+                            <!-- Plus Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </button>
+                    </div>
+                    <div class="p-4 bg-[#242424] rounded-lg my-2 space-y-2 text-sm">
+                        <p class="font-bold">Create your first playlist</p>
+                        <p>It's easy, we'll help you</p>
+                        <button class="bg-white text-black font-bold text-xs px-4 py-1.5 rounded-full mt-2 hover:scale-105">
+                            Create playlist
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main view -->
+            <main class="flex-1 bg-gradient-to-b from-[#222222] to-[#121212] rounded-lg m-2 ml-0 overflow-y-auto">
+                <header class="p-4 flex justify-between items-center sticky top-0 bg-[#222222] bg-opacity-80 backdrop-blur-sm z-10">
+                    <!-- ... existing header buttons ... -->
+                </header>
+
+                <div class="p-6">
+                    <!-- **** MODIFICATION: ID for dynamic greeting **** -->
+                    <h1 id="greeting" class="text-3xl font-bold text-white mb-6">Good Afternoon</h1>
+                    <!-- ... existing "Good Afternoon" section ... -->
+                    
+                    <h2 class="text-2xl font-bold text-white mt-8 mb-4">Your top mixes</h2>
+                    <!-- **** MODIFICATION: Playlist grid is now empty, will be filled by JS **** -->
+                    <div id="playlists-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <!-- Playlist cards will be inserted here -->
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+        <!-- Playback Bar -->
+        <footer class="bg-[#181818] border-t border-gray-800 p-4">
+            <div class="flex justify-between items-center">
+                <!-- **** MODIFICATION: IDs added for song info **** -->
+                <div class="w-1/4 flex items-center gap-3">
+                    <img id="current-song-image" src="https://placehold.co/64x64/121212/121212?text=" alt="Current Song" class="w-14 h-14 rounded">
+                    <div>
+                        <p id="current-song-title" class="text-white text-sm font-semibold">Select a song</p>
+                        <p id="current-song-artist" class="text-xs">to start playing</p>
+                    </div>
+                </div>
+                <!-- Player Controls -->
+                <div class="w-1/2 flex flex-col items-center justify-center">
+                    <!-- ... existing player controls ... -->
+                    <div class="flex items-center gap-4">
+                        <button class="hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 12 4-4 4 4"/><path d="m21 12-4-4-4 4"/><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8Z"/><path d="M7 12h10"/></svg></button>
+                        <button class="hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
+                        <button id="play-pause-button" class="bg-white rounded-full p-2 hover:scale-105">
+                            <svg id="play-pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </button>
+                        <button class="hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
+                        <button class="hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2.1a9.9 9.9 0 0 1 .5 4.3 9.9 9.9 0 0 1-17.5 0 9.9 9.9 0 0 1 17-4.3Z"/><path d="m14 15-4-4"/><path d="m10 15-4-4"/></svg></button>
+                    </div>
+                    <div class="w-full flex items-center gap-2 mt-2">
+                        <span id="current-time" class="text-xs">0:00</span>
+                        <div id="progress-bar-container" class="w-full h-1 bg-gray-600 rounded-full">
+                             <div id="progress-bar" class="w-0 h-full bg-white rounded-full"></div>
+                        </div>
+                        <span id="total-duration" class="text-xs">0:00</span>
+                    </div>
+                </div>
+                <!-- Volume Controls -->
+                <div class="w-1/4 flex items-center justify-end gap-2">
+                    <button id="volume-button" class="hover:text-white">
+                        <svg id="volume-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                    <div id="volume-bar-container" class="w-24 h-1 bg-gray-600 rounded-full">
+                        <div id="volume-bar" class="w-1/2 h-full bg-white rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const songs = [
+            { id: 1, title: "Blinding Lights", artist: "The Weeknd", duration: 200, imageUrl: "https://placehold.co/200x200/ff4560/white?text=S1" },
+            { id: 2, title: "Levitating", artist: "Dua Lipa", duration: 230, imageUrl: "https://placehold.co/200x200/7733ff/white?text=S2" },
+            { id: 3, title: "As It Was", artist: "Harry Styles", duration: 167, imageUrl: "https://placehold.co/200x200/33ffbd/black?text=S3" },
+            { id: 4, title: "Good 4 U", artist: "Olivia Rodrigo", duration: 178, imageUrl: "https://placehold.co/200x200/ffb300/white?text=S4" },
+            { id: 5, title: "Shivers", artist: "Ed Sheeran", duration: 207, imageUrl: "https://placehold.co/200x200/00aaff/white?text=S5" }
+        ];
+
+        const playlists = [
+            { id: 1, title: "Pop Hits", description: "The biggest pop tracks right now.", imageUrl: "https://placehold.co/200x200/e8115b/white?text=Pop", songs: [1, 2, 4] },
+            { id: 2, title: "Indie Chill", description: "Relax and unwind.", imageUrl: "https://placehold.co/200x200/509bf5/white?text=Indie", songs: [3] },
+            { id: 3, title: "Workout Beats", description: "Energy for your workout.", imageUrl: "https://placehold.co/200x200/e13300/white?text=Workout", songs: [1, 5] },
+            { id: 4, title: "Today's Top Hits", description: "The most played tracks today.", imageUrl: "https://placehold.co/200x200/1db954/white?text=Top+Hits", songs: [2, 3, 4] },
+            { id: 5, title: "All Out 2010s", description: "The best of the last decade.", imageUrl: "https://placehold.co/200x200/8d67ab/white?text=2010s", songs: [1, 2, 5] },
+        ];
+
+
+        // --- Player Elements ---
+        const playPauseButton = document.getElementById('play-pause-button');
+        const playPauseIcon = document.getElementById('play-pause-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const volumeButton = document.getElementById('volume-button');
+        const volumeIcon = document.getElementById('volume-icon');
+        const volumeBar = document.getElementById('volume-bar');
+        const volumeBarContainer = document.getElementById('volume-bar-container');
+        const currentSongImage = document.getElementById('current-song-image');
+        const currentSongTitle = document.getElementById('current-song-title');
+        const currentSongArtist = document.getElementById('current-song-artist');
+        const playlistsGrid = document.getElementById('playlists-grid');
+
+        // --- Icon SVGs ---
+        const playIconSVG = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+        const pauseIconSVG = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+        const volumeHighSVG = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+        const volumeMutedSVG = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+
+        // --- Player State & Simulation Variables ---
+        let isPlaying = false;
+        let songDuration = 0;
+        let currentTime = 0;
+        let progressInterval;
+        let isMuted = false;
+        let lastVolume = 0.5;
+        let currentSong = null;
+        
+        // --- Functions ---
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            if (!isPlaying || !currentSong) return;
+            currentTime++;
+            const progressPercent = (currentTime / songDuration) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            currentTimeEl.textContent = formatTime(currentTime);
+
+            if (currentTime >= songDuration) {
+                clearInterval(progressInterval);
+                playPauseIcon.innerHTML = playIconSVG;
+                isPlaying = false;
+                currentTime = 0;
+                progressBar.style.width = '0%';
+                currentTimeEl.textContent = formatTime(0);
+            }
+        }
+
+        function updatePlayerUI(song) {
+            currentSongImage.src = song.imageUrl;
+            currentSongTitle.textContent = song.title;
+            currentSongArtist.textContent = song.artist;
+            totalDurationEl.textContent = formatTime(song.duration);
+        }
+
+        function loadSong(song) {
+            currentSong = song;
+            songDuration = song.duration;
+            currentTime = 0;
+            updatePlayerUI(song);
+            progressBar.style.width = '0%';
+            currentTimeEl.textContent = formatTime(0);
+            
+            if (isPlaying) {
+                clearInterval(progressInterval);
+                progressInterval = setInterval(updateProgress, 1000);
+            }
+        }
+        
+        function renderPlaylists() {
+            let gridHTML = '';
+            playlists.forEach(playlist => {
+                gridHTML += `
+                    <div class="bg-[#181818] p-4 rounded-lg hover:bg-[#282828] transition-colors cursor-pointer flex flex-col gap-2" data-playlist-id="${playlist.id}">
+                        <img src="${playlist.imageUrl}" alt="${playlist.title}" class="w-full h-auto rounded-md shadow-lg mb-2">
+                        <p class="text-white font-bold">${playlist.title}</p>
+                        <p class="text-sm text-gray-400">${playlist.description}</p>
+                    </div>
+                `;
+            });
+            playlistsGrid.innerHTML = gridHTML;
+
+            // Add event listeners to the newly created cards
+            document.querySelectorAll('[data-playlist-id]').forEach(card => {
+                card.addEventListener('click', () => {
+                    const playlistId = card.dataset.playlistId;
+                    const clickedPlaylist = playlists.find(p => p.id == playlistId);
+                    if (clickedPlaylist && clickedPlaylist.songs.length > 0) {
+                        const songToPlay = songs.find(s => s.id === clickedPlaylist.songs[0]);
+                        if (songToPlay) {
+                            loadSong(songToPlay);
+                        }
+                    }
+                });
+            });
+        }
+        
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greetingEl = document.getElementById('greeting');
+            if (hour < 12) {
+                greetingEl.textContent = "Good Morning";
+            } else if (hour < 18) {
+                greetingEl.textContent = "Good Afternoon";
+            } else {
+                greetingEl.textContent = "Good Evening";
+            }
+        }
+
+        // --- Event Listeners ---
+        playPauseButton.addEventListener('click', () => {
+            if (!currentSong) {
+                loadSong(songs[0]); // Load first song if none is loaded
+            }
+
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playPauseIcon.innerHTML = pauseIconSVG;
+                progressInterval = setInterval(updateProgress, 1000); 
+            } else {
+                playPauseIcon.innerHTML = playIconSVG;
+                clearInterval(progressInterval);
+            }
+        });
+
+        progressBarContainer.addEventListener('click', (event) => {
+            if (!currentSong) return;
+            const totalWidth = progressBarContainer.clientWidth;
+            const clickX = event.offsetX;
+            currentTime = (clickX / totalWidth) * songDuration;
+            updateProgress();
+        });
+
+        volumeBarContainer.addEventListener('click', (event) => {
+            const totalWidth = volumeBarContainer.clientWidth;
+            const clickX = event.offsetX;
+            const newVolume = clickX / totalWidth;
+            
+            volumeBar.style.width = `${newVolume * 100}%`;
+            lastVolume = newVolume;
+            isMuted = false;
+            volumeIcon.innerHTML = volumeHighSVG;
+        });
+
+        volumeButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            if (isMuted) {
+                volumeIcon.innerHTML = volumeMutedSVG;
+                volumeBar.style.width = '0%';
+            } else {
+                volumeIcon.innerHTML = volumeHighSVG;
+                volumeBar.style.width = `${lastVolume * 100}%`;
+            }
+        });
+        
+        // --- Initial Load ---
+        setGreeting();
+        renderPlaylists();
+    </script>
+
+</body>
+</html>
+
